@@ -134,7 +134,7 @@ function toggle_visibility(id) {
     }
     unset($allstoresnewdatapicthreenew[$keyofstoretoset]);
     //sort again with distance
-    if(isset($allstoresnewdatapicthreenew))
+    if(isset($allstoresnewdatapicthreenew) && $allstoresnewdatapicthreenew)
     { 
       foreach($allstoresnewdatapicthreenew as $key => $val)
       {
@@ -233,7 +233,7 @@ function toggle_visibility(id) {
         <li>
           <a class="cart-change-store c_makethismystore" sid="<?php echo $thirdstore["store_id"]; ?>"> Make this my store <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> </a> </li>
        <?php
-         //echo $i=1;  
+          $i=1;  
          //echo "<pre>";
          $arraytorunloop = $allstoresnewdatapicthreenew==array()?$allstoresnewdatapicthree:$allstoresnewdatapicthreenew;
     

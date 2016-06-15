@@ -47,6 +47,7 @@
         $location = current($location);
         $lat2 = $location["store_latitude"];
         $long2 = $location["store_longitude"];
+
  ?>
 </ol>
 <script type="text/javascript">
@@ -63,8 +64,18 @@
     );
 //]]>
 </script>
-
+<?php
+$actual_link = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+?>
 <script>
+
+function changestore(sel)
+{
+    //console.log(sel);
+    //alert(sel.value);
+    jQuery('<form action="<?php echo $actual_link; ?>" method="POST" style="display:none"><input type="hidden" name="sidtoset" value="'+sel.value+'" /></form>').appendTo('body').submit();
+}
+                    
 
                        
 /*jQuery('<form action="<?php echo $actual_link; ?>" method="POST" style="display:none"><input type="hidden" name="sidtoset" value="'+jQuery(this).attr("sid")+'" /></form>').appendTo('body').submit();*/

@@ -125,7 +125,7 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
         $layout->generateXml();
         $layout->generateBlocks();
         $output = $layout->getOutput();
-        /*
+        
         $max_distance_from_store = Mage::getStoreConfig('locdistance/locdistancegrp/maxlocdistancec', $storeId);
         $latitude1 = Mage::getSingleton('core/session')->getLat1();
         $longitude1 = Mage::getSingleton('core/session')->getLong1();
@@ -180,7 +180,6 @@ class Mage_Checkout_OnepageController extends Mage_Checkout_Controller_Action
                 //Mage::log(print_r($output,true), null, 'mylogfile77.log');
          }       
         //<--------------------------------->
-        */
         return $output;
     }
 

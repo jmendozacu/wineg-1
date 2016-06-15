@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Spectrum_Overrideonepage>
+      <version>0.1.0</version>
+    </Spectrum_Overrideonepage>
+  </modules>
+  <frontend>
+    <routers>
+      <checkout>
+        <args>
+          <modules>
+          
+            <Spectrum_Overrideonepage before="Mage_Checkout">Spectrum_Overrideonepage</Spectrum_Overrideonepage>
+          </modules>
+        </args>
+      </checkout>
+    </routers>
+  </frontend>
+  
+</config> 
