@@ -18,16 +18,6 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 				}
 
 				$product = $this->_initProduct();
-				$a = $product->toArray();
-		Mage::log(print_r($a,true), null, 'mylogfile66.log');
-		
-		$cart = Mage::getModel('checkout/cart')->getQuote();
-foreach ($cart->getAllItems() as $item) {
-    $productName = $item->getProduct()->getName();
-    $productPrice = $item->getProduct()->getPrice();
-    $productId= $item->getProduct()->getId();
-    Mage::log(print_r(array($productName,$productPrice,$productId),true), null, 'mylogfile77.log');
-}
 				$related = $this->getRequest()->getParam('related_product');
 
 				/**

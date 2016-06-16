@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Spectrum_Ordersavebefore>
+      <version>0.1.0</version>
+    </Spectrum_Ordersavebefore>
+  </modules>
+  <global>
+    <helpers>
+      <ordersavebefore>
+        <class>Spectrum_Ordersavebefore_Helper</class>
+      </ordersavebefore>
+    </helpers>
+	<models>
+	  <ordersavebefore>
+		<class>Spectrum_Ordersavebefore_Model</class>
+		<resourceModel>ordersavebefore_mysql4</resourceModel>
+	  </ordersavebefore>
+	</models>
+    <events>
+	  <sales_order_place_before> <!-- identifier of the event we want to catch -->
+        <observers>
+          <sales_order_place_before_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>ordersavebefore/observer</class> <!-- observers class alias -->
+            <method>saveCustomData</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </sales_order_place_before_handler>
+        </observers>
+      </sales_order_place_before>
+    </events>
+  </global>
+</config> 

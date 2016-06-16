@@ -151,4 +151,13 @@
     <varien>
         <class>Varien</class>
     </varien>
+    <stores>
+    <admin>
+        <design>
+            <theme>
+                <template>custom</template>
+            </theme>
+        </design>
+    </admin>
+</stores>
 </config>
