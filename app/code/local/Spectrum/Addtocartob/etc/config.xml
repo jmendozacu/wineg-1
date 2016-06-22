@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Spectrum_Addtocartob>
+      <version>0.1.0</version>
+    </Spectrum_Addtocartob>
+  </modules>
+  <global>
+    <helpers>
+      <addtocartob>
+        <class>Spectrum_Addtocartob_Helper</class>
+      </addtocartob>
+    </helpers>
+	<models>
+	  <addtocartob>
+		<class>Spectrum_Addtocartob_Model</class>
+		<resourceModel>addtocartob_mysql4</resourceModel>
+	  </addtocartob>
+	</models>
+    <events>
+	  <checkout_cart_product_add_after> <!-- identifier of the event we want to catch -->
+        <observers>
+          <checkout_cart_product_add_after_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>addtocartob/observer</class> <!-- observers class alias -->
+            <method>setAddtocartAttribute</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </checkout_cart_product_add_after_handler>
+        </observers>
+      </checkout_cart_product_add_after>
+    </events>
+  </global>
+</config> 

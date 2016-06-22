@@ -24,8 +24,6 @@ class Spectrum_Ordersavebefore_Model_Observer
 	                //$fieldVal = Mage::app()->getFrontController()->getRequest()->getParams();
 	                $order->setDeliveryfrom($output);
 
-
-
                 }
 			}
 		

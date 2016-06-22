@@ -5,8 +5,107 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 	public function addAction()
 	{
 		$cart   = $this->_getCart();
-		
 		$params = $this->getRequest()->getParams();
+        //print_r($params);
+        $cartone = Mage::getModel('checkout/cart')->getQuote();
+        $sm_in_cart = $cartone->getCustomerShipping();
+        $comming_shipping_not_supported_by_cart = "yes";
+        foreach ($cartone->getAllItems() as $item) {
+         $productId = $item->getProduct()->getId();
+         
+         $productName = $item->getProduct()->getName();
+         //$productPrice = $item->getProduct()->getPrice();
+         
+
+
+          $attribute_code = "product_shipping";
+          $storeIdforattribute = 0; 
+          $productId = $productId;
+
+          $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
+
+
+          if ($valueforattribute != "" && !is_array($valueforattribute)) 
+          {
+            $valueforattribute = explode(',', $valueforattribute);
+          }
+          else
+          {
+            $valueforattribute[] = "deliveryfromstore";
+          }
+
+          if(!in_array($params["shippingp"],$valueforattribute))
+          {  
+                $comming_shipping_not_supported_by_cart = "no"; 
+                $productname_array[] = $productName;
+                
+          }
+          
+        }
+
+
+
+
+
+                $sm_comming = $params["shippingp"];
+                //$sm_in_cart  
+
+
+                if($comming_shipping_not_supported_by_cart == "no" && isset($productname_array))
+                {    
+                   $pn = implode(",", $productname_array);
+                   echo json_encode(array("status"=>"ERROR","message"=>"The shipping method ".$sm_comming." is not supported by ".$pn." products. Either place seprate order for this product or remove that product from cart."));
+                   die;
+                 
+                }
+                //$d = true;
+                //deliveryfromstore
+             
+                if($sm_in_cart == "fedex" && $sm_comming == 'storepickup')
+                {
+                   $params["shippingp"]="fedex";
+                   $_POST["shippingp"]="fedex";
+                
+                
+                }
+                elseif($sm_in_cart == "fedex" && $sm_comming == 'deliveryfromstore')
+                {    
+                   echo json_encode(array("status"=>"ERROR","message"=>"The order has shipping method Fedex and you have selected method Store Delivery either you change this method in cart page or place seprate order for this product."));
+                   die;
+                 
+                }
+                elseif($sm_in_cart == "storepickup" && $sm_comming == 'fedex')
+                {    
+                   $params["shippingp"]="fedex";
+                   $_POST["shippingp"]="fedex";
+                   
+                }
+                elseif($sm_in_cart == "storepickup" && $sm_comming == 'deliveryfromstore')
+                {    
+                   echo json_encode(array("status"=>"ERROR","message"=>"The order has shipping method Store Pickup and you have selected method Store Delivery either you change this method in cart page or place seprate order for this product."));
+                   die;
+                   
+                }
+                elseif($sm_in_cart == "deliveryfromstore" && $sm_comming == 'storepickup')
+                {    
+                   echo json_encode(array("status"=>"ERROR","message"=>"The order has shipping method Store Delivery and you have selected method Store Pickup either you change this method in cart page or place seprate order for this product."));
+                   die;
+                   
+                }
+                elseif($sm_in_cart == "deliveryfromstore" && $sm_comming == 'fedex')
+                {    
+                   echo json_encode(array("status"=>"ERROR","message"=>"The order has shipping method Store Delivery and you have selected method Fedex either you change this method in cart page or place seprate order for this product."));
+                   die;
+                   
+                }
+                else
+                {    
+                  //echo "Wonder which day is this ?";
+                }    
+             
+
+
+
 		if($params['isAjax'] == 1){
 			$response = array();
 			try {

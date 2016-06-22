@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Spectrum_Adddatatoquote>
+      <version>0.1.0</version>
+    </Spectrum_Adddatatoquote>
+  </modules>
+  <global>
+    <helpers>
+      <adddatatoquote>
+        <class>Spectrum_Adddatatoquote_Helper</class>
+      </adddatatoquote>
+    </helpers>
+	<resources>
+	  <adddatatoquote_setup>
+		<setup>
+		  <module>Spectrum_Adddatatoquote</module>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </adddatatoquote_setup>
+	  <adddatatoquote_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </adddatatoquote_write>
+	  <adddatatoquote_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </adddatatoquote_read>
+	</resources>
+  </global>
+</config> 

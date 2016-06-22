@@ -264,30 +264,29 @@ if($enable_addtocart_sticky){
             $valueforattribute = explode(',', $valueforattribute);
 
           }
-
-   
+ 
           $shippingarray = getAllShippingMethods();
-         
-    
+          $chekit = 'checked="checked"';
           if(is_array($shippingarray) && is_array($valueforattribute))
           {  
             foreach ($shippingarray as $key => $value) 
             {
-                      
-                if (in_array($key,$valueforattribute))
+                 if (in_array($key,$valueforattribute))
                 {
-                    echo "<p>*".$value["label"]."</p></br>";
+                    echo '<p>*<input type="radio" name="shippingp" value="'.$key.'"   '.$chekit.' >'.$value["label"].'</p></br>';
+                    if($key=='fedex'){ echo "Fedex will set as order shipping method.</br>";}
+                    $chekit = "";
                 }
                 else
                 {
-                    echo "<p>x".$value["label"]."</p></br>";   
+                    echo '<p>x<input type="radio" name="shippingp" value="'.$key.'" disabled="disabled">'.$value["label"]."</p></br>";   
                 }    
-              
+                
             }      
           }
           else
           {
-              echo "<p>* Store Pickup</p></br>";
+              echo '<p>*<input type="radio" name="shippingp" value="storepickup" checked="checked"> Store Pickup</p></br>';
           }    
           
 
@@ -320,7 +319,7 @@ if($enable_addtocart_sticky){
                 }
                 url = url.replace("http://", "//");
                 url = url.replace("https://", "//");
-                var data = jQuery('#product_addtocart_form').serialize();
+                var data = jQuery('#product_addtocart_form').serialize(); console.log(data);
                 data += '&isAjax=1';
                 var is_quickview = false;
                 if(jQuery("body").hasClass("quickview-index-view")){

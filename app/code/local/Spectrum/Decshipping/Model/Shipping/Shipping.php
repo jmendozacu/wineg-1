@@ -86,7 +86,7 @@ class Spectrum_Decshipping_Model_Shipping_Shipping extends Mage_Shipping_Model_S
         Mage::getSingleton('core/session')->setLong1(next($data));
      }
      
-     Mage::log(print_r($data,true), null, 'mylogfile55.log');
+     //Mage::log(print_r($data,true), null, 'mylogfile55.log');
      }
      
      $call_counter++;

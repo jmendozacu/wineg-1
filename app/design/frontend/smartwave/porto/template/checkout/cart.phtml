@@ -8,6 +8,89 @@
 <div class="cart">
     <div class="page-title title-buttons">
         <h1><?php echo $this->__('Shopping Cart') ?></h1>
+        <?php 
+
+            if(isset($_POST) && $_POST)
+            {
+                $comming_shipping_not_supported_by_cart = "yes";
+                $cartone = Mage::getModel('checkout/cart')->getQuote();
+                $sm_in_cart = $cartone->getCustomerShipping();
+                
+                foreach ($cartone->getAllItems() as $item) 
+                {
+                    $productId = $item->getProduct()->getId();
+                    $productName = $item->getProduct()->getName();
+                    //$productPrice = $item->getProduct()->getPrice();
+                    $attribute_code = "product_shipping";
+                    $storeIdforattribute = 0; 
+                    $productId = $productId;
+                    $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
+
+
+                    if ($valueforattribute != "" && !is_array($valueforattribute)) 
+                    {
+                      $valueforattribute = explode(',', $valueforattribute);
+                    }
+                    else
+                    {
+                      $valueforattribute[] = "deliveryfromstore";
+                    }
+
+                    if(!in_array($_POST["change_shipping_method_cart"],$valueforattribute))
+                    {  
+                        $comming_shipping_not_supported_by_cart = "no"; 
+                        $productname_array[] = $productName;
+                        
+                    }
+                  
+                }
+
+                if($comming_shipping_not_supported_by_cart == "no")
+                {
+                    $output = implode(",", $productname_array);
+                    echo "<p>".$output.". These product do not support ".$_POST["change_shipping_method_cart"]." shipping method. Either remove them or place seprate order.</p>";
+                }
+
+                if($comming_shipping_not_supported_by_cart == "yes")
+                {
+                    Mage::getSingleton("checkout/cart")->getQuote()->setCustomerShipping($_POST["change_shipping_method_cart"])->save();
+                    $url = "Location: ".Mage::helper('checkout/cart')->getCartUrl();
+                    header($url);
+                    die;
+                }    
+
+            }
+        ?>
+        <p>
+        <?php
+            $cartone = Mage::getModel('checkout/cart')->getQuote();
+            $sm_in_cart = $cartone->getCustomerShipping();
+            if($sm_in_cart != "")
+            { 
+        ?>
+        <p>Current Shipping For order : <?php echo ucfirst($sm_in_cart); ?></p>
+        <?php } ?>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <form action="<?php echo Mage::helper('checkout/cart')->getCartUrl(); ?>" method="POST">
+        <?php
+          $shippingarray = getAllShippingMethods();
+          $chekit = '';
+          if(is_array($shippingarray) && $shippingarray)
+          {  
+            echo '<select name="change_shipping_method_cart">';    
+            foreach ($shippingarray as $key => $value) 
+            {
+                      if($key==$sm_in_cart){ $chekit = 'checked="checked"'; }
+        ?>
+            <option value="<?php echo $key ?>" <?php echo $chekit ?> ><?php echo $value["label"] ?></option>
+        <?php
+                $chekit = "";
+            }
+            echo '</select><input type="submit" name="change_shipping" value="Change" />'; 
+          }
+        ?>
+        </form>
+        </p>
         <?php if(!$this->hasError()): ?>
             <ul class="checkout-types">
                 <?php foreach ($this->getMethods('top_methods') as $method): ?>
@@ -134,3 +217,33 @@
     </div>
     <?php echo $this->getChildHtml('crosssell') ?>
 </div>
+<?php
+function getAllShippingMethods()
+    {
+        $methods = Mage::getSingleton('shipping/config')->getActiveCarriers();
+
+        $options = array();
+
+        foreach($methods as $_ccode => $_carrier)
+        {
+            $_methodOptions = array();
+            if($_methods = $_carrier->getAllowedMethods())
+            {
+                foreach($_methods as $_mcode => $_method)
+                {
+                    $_code = $_ccode . '_' . $_mcode;
+                    $_methodOptions[$_mcode] = array('value' => $_code, 'label' => $_method);
+                }
+
+                if(!$_title = Mage::getStoreConfig("carriers/$_ccode/title"))
+                    $_title = $_ccode;
+
+                $options[$_ccode] = array('value' => $_methodOptions, 'label' => $_title);
+            }
+        }
+
+    return $options;
+   }
+
+
+?>
