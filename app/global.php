@@ -1,5 +1,10 @@
 <?php
 
+function getShippingMapping()
+{
+    return array("deliveryfromstore"=>"Store Delivery","fedex"=>"Fedex","storepickup"=>"Store Pickup");
+}
+
 function getUserIP()
 {
     $client  = @$_SERVER['HTTP_CLIENT_IP'];
