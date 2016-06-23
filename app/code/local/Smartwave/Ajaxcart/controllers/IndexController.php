@@ -41,7 +41,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 
         $productcheck = $this->_initProduct();
         
-        $productId = $productcheck->getId();
+        echo $productId = $productcheck->getId();
           $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
 
           if ($valueforattribute != "" && !is_array($valueforattribute)) 
@@ -58,8 +58,12 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
           }
+          echo "<pre>";
+echo $sm_in_cart;
+print_r($valueforattribute);
+echo $comming_shipping_not_supported_by_cart;
 
-        //echo "--------"; die;
+        echo "--------"; die;
 
                 $sm_comming = $params["shippingp"];
                 //$sm_in_cart  
