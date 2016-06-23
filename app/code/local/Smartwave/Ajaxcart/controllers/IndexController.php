@@ -41,7 +41,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 
         $productcheck = $this->_initProduct();
         
-        echo $productId = $productcheck->getId();
+         $productId = $productcheck->getId();
           $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
 
           if ($valueforattribute != "" && !is_array($valueforattribute)) 
