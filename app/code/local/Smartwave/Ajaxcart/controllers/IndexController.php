@@ -57,6 +57,9 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
           {  
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
+                $pn = implode(",", $productname_array);
+                   echo json_encode(array("status"=>"ERROR","message"=>"The shipping method ".$sm_comming." is going to overridden by shipping method  ".$sm_in_cart." which is not supported by ".$pn." products. Either place seprate order for this product or remove that product from cart."));
+                   die;
           }
 
 
