@@ -29,7 +29,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
             $valueforattribute[] = "storepickup";
           }
 
-          if(!in_array($params["shippingp"],$valueforattribute))
+          if(!in_array($params["shippingp"],$valueforattribute) && ($sm_in_cart=="fexex" && !in_array($sm_in_cart,$valueforattribute)))
           {  
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
@@ -42,7 +42,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
                 if($comming_shipping_not_supported_by_cart == "no" && isset($productname_array))
                 {    
                    $pn = implode(",", $productname_array);
-                   echo json_encode(array("status"=>"ERROR","message"=>"The shipping method ".$sm_comming." is not supported by ".$pn." products. Either place seprate order for this product or remove that product from cart."));
+                   echo json_encode(array("status"=>"ERROR","message"=>"The shipping method ".$sm_comming." or set shipping method is not supported by ".$pn." products. Either place seprate order for this product or remove that product from cart."));
                    die;
                 }
                 //$d = true;
