@@ -34,6 +34,12 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
           }
+
+          if($sm_in_cart=="fexex" && $params["shippingp"] == "storepickup" && !in_array($sm_in_cart,$valueforattribute))
+          {  
+                $comming_shipping_not_supported_by_cart = "no"; 
+                $productname_array[] = $productName;
+          }
           
         }
 
