@@ -42,7 +42,10 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
           }
           
         }
-echo $comming_shipping_not_supported_by_cart."------------------------------"; die;
+
+        $productcheck = $this->_initProduct();
+        
+
                 $sm_comming = $params["shippingp"];
                 //$sm_in_cart  
                 if($comming_shipping_not_supported_by_cart == "no" && isset($productname_array))
