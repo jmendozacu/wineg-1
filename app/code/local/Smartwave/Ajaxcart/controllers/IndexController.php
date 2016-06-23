@@ -61,6 +61,10 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
           echo "<pre>";
 echo $sm_in_cart;
 print_r($valueforattribute);
+echo $params["shippingp"];
+echo "----------";
+echo !in_array($sm_in_cart,$valueforattribute);
+echo "----------";
 echo $comming_shipping_not_supported_by_cart;
 
         echo "--------"; die;
