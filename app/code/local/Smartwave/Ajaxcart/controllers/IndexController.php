@@ -29,7 +29,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
             $valueforattribute[] = "storepickup";
           }
 
-          if(!in_array($params["shippingp"],$valueforattribute) && ($sm_in_cart=="fexex" && !in_array($sm_in_cart,$valueforattribute)))
+          if(!in_array($params["shippingp"],$valueforattribute))
           {  
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
@@ -42,7 +42,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
           }
           
         }
-
+echo $comming_shipping_not_supported_by_cart."------------------------------"; die;
                 $sm_comming = $params["shippingp"];
                 //$sm_in_cart  
                 if($comming_shipping_not_supported_by_cart == "no" && isset($productname_array))
