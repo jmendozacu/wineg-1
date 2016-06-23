@@ -22,7 +22,67 @@ class Spectrum_Decshipping_Model_Shipping_Shipping extends Mage_Shipping_Model_S
         
        //$distance = Mage::getSingleton('core/session')->getStoredeliverydistance();
        //$max_distance_from_store = Mage::getStoreConfig('locdistance/locdistancegrp/maxlocdistancec', $storeId);
+//<!-- -------------------------------------------- -->
 
+    static $call_counter_first = 0;
+    static $cart_shipping_methods = array();
+    static $intersect_array = array();
+    if ( $call_counter_first == 0 ) 
+    {
+       $cartone = Mage::getModel('checkout/cart')->getQuote();
+        
+        foreach ($cartone->getAllItems() as $item) 
+        {
+             $productId = $item->getProduct()->getId();
+            
+            
+              $attribute_code = "product_shipping";
+              $storeIdforattribute = 0; 
+              $productId = $productId;
+              $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
+
+              if ($valueforattribute != "" && !is_array($valueforattribute)) 
+              {
+                $valueforattribute = explode(',', $valueforattribute);
+              }
+              else
+              {
+                $valueforattribute[] = "storepickup";
+              }
+
+              
+              $cart_shipping_methods[] = $valueforattribute;
+        }
+        $call_counter_first++;
+        
+        if(isset($cart_shipping_methods) && $cart_shipping_methods)
+        {
+            foreach ($cart_shipping_methods as $key => $value) 
+            {
+                //Mage::log(print_r($value,true), null, 'cartaaa.log');
+                if($intersect_array != array())
+                {    
+                    $intersect_array = array_intersect($value, $intersect_array);
+                }
+                else
+                {    
+                    $intersect_array = $value;
+                }    
+            }
+
+                
+        }    
+    }
+
+
+    if(isset($intersect_array) && $intersect_array && !in_array($carrierCode,$intersect_array)) 
+    {
+                return false;
+    }            
+
+//Mage::log(print_r($intersect_array,true), null, 'cartbbb.log');
+
+//<!-- code for store delivery logic starts here -->
      $location = Mage::getSingleton('core/session')->getAllstoresnewdatapicthree();
 
      $customerData= array(
