@@ -35,17 +35,31 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
                 $productname_array[] = $productName;
           }
 
+          
+          
+        }
+
+        $productcheck = $this->_initProduct();
+        
+        $productId = $productcheck->getId();
+          $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
+
+          if ($valueforattribute != "" && !is_array($valueforattribute)) 
+          {
+            $valueforattribute = explode(',', $valueforattribute);
+          }
+          else
+          {
+            $valueforattribute[] = "storepickup";
+          }
+
           if($sm_in_cart=="fexex" && $params["shippingp"] == "storepickup" && !in_array($sm_in_cart,$valueforattribute))
           {  
                 $comming_shipping_not_supported_by_cart = "no"; 
                 $productname_array[] = $productName;
           }
-          
-        }
 
-        $productcheck = $this->_initProduct();
-        echo $productcheck->getId();
-        echo "--------"; die;
+        //echo "--------"; die;
 
                 $sm_comming = $params["shippingp"];
                 //$sm_in_cart  
