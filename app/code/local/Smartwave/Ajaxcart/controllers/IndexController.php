@@ -44,7 +44,8 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
         }
 
         $productcheck = $this->_initProduct();
-        
+        echo $productcheck->getId();
+        echo "--------"; die;
 
                 $sm_comming = $params["shippingp"];
                 //$sm_in_cart  
