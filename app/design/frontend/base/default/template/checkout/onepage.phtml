@@ -53,7 +53,7 @@
 //<![CDATA[
     var accordion = new Accordion('checkoutSteps', '.step-title', true);
     <?php if($this->getActiveStep()): ?>
-    accordion.openSection('opc-<?php echo $this->getActiveStep() ?>');
+    accordion.openSection('opc-<?php echo $mthis->getActiveStep() ?>');
     <?php endif ?>
     var checkout = new Checkout(accordion,{
         progress: '<?php echo $this->getUrl('checkout/onepage/progress') ?>',

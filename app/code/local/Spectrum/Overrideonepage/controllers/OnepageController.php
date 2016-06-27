@@ -35,8 +35,103 @@ require_once "Mage/Checkout/controllers/OnepageController.php";
 class Spectrum_Overrideonepage_OnepageController  extends Mage_Checkout_OnepageController
 {
     
+      /**
+     * Checkout page
+     */
+    public function indexAction()
+    {
 
-    /**
+
+      $a = true;
+      if ($a) 
+      {
+ 
+/////////////////////////////////////
+
+        
+        $cartone = Mage::getModel('checkout/cart')->getQuote();
+        $sm_in_cart = $cartone->getCustomerShipping();
+        $comming_shipping_not_supported_by_cart = "yes";
+        $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
+
+        //Mage::log(print_r($totalItemsInCart,true), null, 'myoblogfilefxx.log');
+            if($totalItemsInCart && $sm_in_cart)
+            {   
+                foreach ($cartone->getAllItems() as $item) 
+                {
+                    $productId = $item->getProduct()->getId();
+                    $productName = $item->getProduct()->getName();
+                    //$productPrice = $item->getProduct()->getPrice();
+                    $attribute_code = "product_shipping";
+                    $storeIdforattribute = 0; 
+                    $productId = $productId;
+                    $valueforattribute = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, $attribute_code, $storeIdforattribute);
+
+                    if ($valueforattribute != "" && !is_array($valueforattribute)) 
+                    {
+                       $valueforattribute = explode(',', $valueforattribute);
+                    }
+                    else
+                    {
+                       $valueforattribute[] = "storepickup";
+                    }
+
+                    if(!in_array($sm_in_cart,$valueforattribute))
+                    {  
+                        $comming_shipping_not_supported_by_cart = "no"; 
+                        $productname_array[] = $productName;
+                    }
+
+                      
+                      
+                } //end foreach
+
+                //echo $comming_shipping_not_supported_by_cart;      
+
+                if($comming_shipping_not_supported_by_cart == "no" && isset($productname_array))
+                {    
+                    $pn = implode(",", $productname_array);
+                    $smapping = getShippingMapping();
+                    $message = "The shipping method ".$smapping[$sm_in_cart]." is not supported by ".$pn." products. Either place seprate order for this product or remove that product from cart or change shipping method in cart.";
+                    Mage::getSingleton('catalog/session')->addError($this->__($message));
+                    Mage::app()->getFrontController()->getResponse()->setRedirect(Mage::getUrl('checkout/cart'))->sendResponse();
+                    return;
+                }
+            }           
+
+      }
+ 
+
+        if (!Mage::helper('checkout')->canOnepageCheckout()) {
+            Mage::getSingleton('checkout/session')->addError($this->__('The onepage checkout is disabled.'));
+            $this->_redirect('checkout/cart');
+            return;
+        }
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError()) {
+            $this->_redirect('checkout/cart');
+            return;
+        }
+        if (!$quote->validateMinimumAmount()) {
+            $error = Mage::getStoreConfig('sales/minimum_order/error_message') ?
+                Mage::getStoreConfig('sales/minimum_order/error_message') :
+                Mage::helper('checkout')->__('Subtotal must exceed minimum order amount');
+
+            Mage::getSingleton('checkout/session')->addError($error);
+            $this->_redirect('checkout/cart');
+            return;
+        }
+        Mage::getSingleton('checkout/session')->setCartWasUpdated(false);
+        Mage::getSingleton('customer/session')->setBeforeAuthUrl(Mage::getUrl('*/*/*', array('_secure' => true)));
+        $this->getOnepage()->initCheckout();
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Checkout'));
+        $this->renderLayout();
+    }
+
+
+     /**
      * Get shipping method step html
      *
      * @return string

@@ -5,7 +5,10 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 	public function addAction()
 	{
 		$cart   = $this->_getCart();
-		$params = $this->getRequest()->getParams();
+		
+    $params = $this->getRequest()->getParams();
+    //code will be transfered to observer
+    /*
         //print_r($params);
         $cartone = Mage::getModel('checkout/cart')->getQuote();
         $sm_in_cart = $cartone->getCustomerShipping();
@@ -109,7 +112,7 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 
                 }    
              
-
+*/
 
 
 		if($params['isAjax'] == 1){
@@ -199,6 +202,25 @@ class Smartwave_Ajaxcart_IndexController extends Mage_Checkout_CartController
 				$response['message'] = $this->__('Cannot add the item to shopping cart.');
 				Mage::logException($e);
 			}
+
+      /////////////////////////////
+
+    $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
+      if(isset($response['status']) && $response['status'] == "SUCCESS" && $totalItemsInCart == 1){
+          $cartone = Mage::getModel('checkout/cart')->getQuote();
+          $productQty = 0;
+          foreach ($cartone->getAllItems() as $item) {
+            $productQty = $productQty + $item->getQty();
+          }
+        
+          if($productQty == 1)
+          {
+            $response['message'] = $response['message'] . " Please referesh the page !!";
+          }  
+      }
+
+
+      //////////////
 			$this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
 			return;
 		}else{
